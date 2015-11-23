@@ -85,24 +85,45 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
 
     
     @IBAction func convertCurrency(){
-        let endpoint = NSURL(string: "https://api.fixer.io/latest?symbols=\(toCurrency)&base=\(fromCurrency)")
-        //if endpoint==nil {resultLabel.text = "fucking shit"}
-      //  return
-        var data = NSData(contentsOfURL: endpoint!)
+        if numInputView.text == "" {
+            let alert = UIAlertController(title: "Blank field",
+                message: "Please enter in value to convert.", preferredStyle: .Alert)
+            let action = UIAlertAction(title: "Awesome", style: .Default, handler: nil)
+            alert.addAction(action)
+            presentViewController(alert, animated: true, completion: nil)
+        }
+        else {
+            
         
-        do{
-        if let json: NSDictionary = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as? NSDictionary {
-            if let items = json["rates"] as? [String:AnyObject] {
-                    if let toCurrencyTemp = items[self.toCurrency] as? Double{
-                        self.rate = toCurrencyTemp
+        
+        if fromCurrency == toCurrency {
+            rate = 1
+        }
+        else {
+            let endpoint = NSURL(string: "https://api.fixer.io/latest?symbols=\(toCurrency)&base=\(fromCurrency)")
+            //if endpoint==nil {resultLabel.text = "fucking shit"}
+            //  return
+            var data = NSData(contentsOfURL: endpoint!)
+            
+            do{
+                if let json: NSDictionary = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as? NSDictionary {
+                    if let items = json["rates"] as? [String:AnyObject] {
+                        if let toCurrencyTemp = items[self.toCurrency] as? Double{
+                            self.rate = toCurrencyTemp
+                        }
                     }
+                }
             }
+            catch {}
+            
         }
-        }
-        catch {}
+        
         resultLabel.text = String((rate) * Double(numInputView.text!)!)
         
     }
+    
+    }
+    
 
 
 

@@ -36,8 +36,8 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         
 
         
-        pickerData = ["CAD", "USD", "GBP", "AUD", "INR"]
-        toPickerData = ["CAD", "USD", "GBP", "AUD", "INR"]
+        pickerData = ["CAD", "USD", "GBP", "AUD"]
+        toPickerData = ["CAD", "USD", "GBP", "AUD"]
         
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
         view.addGestureRecognizer(tap)
@@ -60,8 +60,11 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
             return pickerData.count
             //return 3;
         }
-        return toPickerData.count
+        else {
+            return toPickerData.count
 
+        }
+        
     }
     
     // The data to return for the row and component (column) that's being passed in
@@ -71,9 +74,14 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
             fromCurrency = pickerData[row]
             return pickerData[row]
         }
-        
-        toCurrency = toPickerData[row]
-        return toPickerData[row]
+        else {
+            
+            toCurrency = toPickerData[row]
+            return toPickerData[row]
+            
+        }
+
+
         
     }
     
@@ -84,44 +92,65 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     }
 
     
+//    @IBAction func convertCurrency(){
+//        if numInputView.text == "" {
+//            let alert = UIAlertController(title: "Blank field",
+//                message: "Please enter in value to convert.", preferredStyle: .Alert)
+//            let action = UIAlertAction(title: "Awesome", style: .Default, handler: nil)
+//            alert.addAction(action)
+//            presentViewController(alert, animated: true, completion: nil)
+//        }
+//        else {
+//            
+//        
+//        
+//        if fromCurrency == toCurrency {
+//            rate = 1
+//        }
+//        else {
+//            let endpoint = NSURL(string: "https://api.fixer.io/latest?symbols=\(toCurrency)&base=\(fromCurrency)")
+//
+//            var data = NSData(contentsOfURL: endpoint!)
+//            
+//            do{
+//                if let json: NSDictionary = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as? NSDictionary {
+//                    if let items = json["rates"] as? [String:AnyObject] {
+//                        if let toCurrencyTemp = items[self.toCurrency] as? Double{
+//                            self.rate = toCurrencyTemp
+//                        }
+//                    }
+//                }
+//            }
+//            catch {}
+//            
+//        }
+//        
+//        resultLabel.text = String((rate) * Double(numInputView.text!)!)
+//        
+//    }
+//    
+//    }
+    
     @IBAction func convertCurrency(){
-        if numInputView.text == "" {
-            let alert = UIAlertController(title: "Blank field",
-                message: "Please enter in value to convert.", preferredStyle: .Alert)
-            let action = UIAlertAction(title: "Awesome", style: .Default, handler: nil)
-            alert.addAction(action)
-            presentViewController(alert, animated: true, completion: nil)
-        }
-        else {
-            
+
         
-        
-        if fromCurrency == toCurrency {
-            rate = 1
-        }
-        else {
-            let endpoint = NSURL(string: "https://api.fixer.io/latest?symbols=\(toCurrency)&base=\(fromCurrency)")
-            //if endpoint==nil {resultLabel.text = "fucking shit"}
-            //  return
-            var data = NSData(contentsOfURL: endpoint!)
-            
-            do{
-                if let json: NSDictionary = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as? NSDictionary {
-                    if let items = json["rates"] as? [String:AnyObject] {
-                        if let toCurrencyTemp = items[self.toCurrency] as? Double{
-                            self.rate = toCurrencyTemp
+                let endpoint = NSURL(string: "https://api.fixer.io/latest?symbols=\(toCurrency)&base=\(fromCurrency)")
+                
+                var data = NSData(contentsOfURL: endpoint!)
+                
+                do{
+                    if let json: NSDictionary = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as? NSDictionary {
+                        if let items = json["rates"] as? [String:AnyObject] {
+                            if let toCurrencyTemp = items[self.toCurrency] as? Double{
+                                self.rate = toCurrencyTemp
+                            }
                         }
                     }
                 }
-            }
-            catch {}
+                catch {}
+        
             
-        }
-        
-        resultLabel.text = String((rate) * Double(numInputView.text!)!)
-        
-    }
-    
+            resultLabel.text = String((rate) * Double(numInputView.text!)!)
     }
     
 
